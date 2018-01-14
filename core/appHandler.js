@@ -5,12 +5,15 @@ var mathjs = require('mathjs')
 const Op = db.Sequelize.Op
 
 module.exports.userSearch = function (req, res) {
-	console.log('userSearch');
 	const request_data = req.body[0]
 	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value + "'";
+	// var query = "SELECT name,id from users where login='' UNION SELECT name,password from users where login='test'";
+
 	db.sequelize.query(query, {
 		model: db.User
 	}).then(user => {
+		console.log('====== user');
+		console.log(user);
 		if (user.length) {
 			var output = {
 				user: {
@@ -18,21 +21,12 @@ module.exports.userSearch = function (req, res) {
 					id: user[0].id
 				}
 			}
-			// res.render('app/usersearch', {
-			// 	output: output
-			// })
-			res.json(output)
+			res.json(output);
 		} else {
-			req.flash('warning', 'User not found')
-			res.render('app/usersearch', {
-				output: null
-			})
+			res.json({warning: {msg:'User not found'}});
 		}
 	}).catch(err => {
-		req.flash('danger', 'Internal Error')
-		res.render('app/usersearch', {
-			output: null
-		})
+		res.json({danger:{msg: 'Internal Error'}});
 	})
 }
 

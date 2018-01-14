@@ -11,15 +11,12 @@
             <div class='col-md-6'>
                 <h2>User Search</h2>
 
-                <% if (messages.success) { %>
-                    <div class="alert alert-success"><%=messages.success%></div>
-                <% } else if (messages.danger) { %>
-                    <div class="alert alert-danger"><%= messages.danger %></div>
-                <% } else if (messages.warning) {%>
-                    <div class="alert alert-warning"><%= messages.warning %></div>
-                <% } else if (messages.info) {%>
-                    <div class="alert alert-info"><%= messages.info %></div>
-                <% } %>
+                <div class="alert" id="alert-msg"></div>
+
+                <!-- <div class="alert alert-success" id="alert-success"></div>
+                <div class="alert alert-danger" id="alert-danger"></div>
+                <div class="alert alert-warning" id="alert-warning"></div>
+                <div class="alert alert-info" id="alert-info"></div> -->
 
                 <form id="userSearch" name="userSearch" action="/app/usersearch" method="post">
                     <fieldset>
@@ -39,12 +36,17 @@
                 $('#userSearch_0').on('click', function(e) {
                   e.preventDefault();
                   var formData = JSON.stringify($("#userSearch").serializeArray());
-                  console.log('testing');
                   $.ajax({
                     type: "POST",
                     url: "/app/usersearch",
                     data: formData,
                     success: function(data){
+                      console.log(data)
+                      if(data.warning && data.warning.msg){
+                        $('#alert-msg').addClass('alert-warning').append(data.warning.msg);
+                        return;
+                      }
+                      // ' UNION SELECT password from users where login='user' --
                       $('#searchResults').append(`
                         <h2>Search Result</h2>
                         <table class='table'>
@@ -58,6 +60,9 @@
                             </tr>
                         </table>
                       `)
+                    },
+                    error: function(data){
+                      $('#alert-msg').addClass('alert-danger').append(data.responseJSON.danger.msg);
                     },
                     dataType: "json",
                     contentType : "application/json"
