@@ -4,14 +4,14 @@ var authHandler = require('../core/authHandler')
 
 module.exports = function (passport) {
 	router.get('/', authHandler.isAuthenticated, function (req, res) {
-		res.redirect('/learn')
+		res.redirect('/test')
 	})
 
 	router.get('/login', authHandler.isNotAuthenticated, function (req, res) {
 		res.render('login')
 	})
 
-	router.get('/learn/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
+	router.get('/test/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
 		res.render('vulnerabilities/layout', {
 			vuln: req.params.vuln,
 			vuln_title: vulnDict[req.params.vuln],
@@ -27,8 +27,8 @@ module.exports = function (passport) {
 		})
 	})
 
-	router.get('/learn', authHandler.isAuthenticated, function (req, res) {
-		res.render('learn')
+	router.get('/test', authHandler.isAuthenticated, function (req, res) {
+		res.render('test')
 	})
 
 	router.get('/register', authHandler.isNotAuthenticated, function (req, res) {
@@ -47,13 +47,13 @@ module.exports = function (passport) {
 	router.get('/resetpw', authHandler.resetPw)
 
 	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/learn',
+		successRedirect: '/test',
 		failureRedirect: '/login',
 		failureFlash: true
 	}))
 
 	router.post('/register', passport.authenticate('signup', {
-		successRedirect: '/learn',
+		successRedirect: '/test',
 		failureRedirect: '/register',
 		failureFlash: true
 	}))

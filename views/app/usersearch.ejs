@@ -15,9 +15,9 @@
                     <div class="alert alert-success"><%=messages.success%></div>
                 <% } else if (messages.danger) { %>
                     <div class="alert alert-danger"><%= messages.danger %></div>
-                <% } else if (messages.warning) {%> 
+                <% } else if (messages.warning) {%>
                     <div class="alert alert-warning"><%= messages.warning %></div>
-                <% } else if (messages.info) {%> 
+                <% } else if (messages.info) {%>
                     <div class="alert alert-info"><%= messages.info %></div>
                 <% } %>
 
@@ -32,9 +32,27 @@
                         </div>
 
                         <input type="submit" value="Submit" id="userSearch_0" class="btn btn-primary" />
-
                     </fieldset>
                 </form>
+
+                <script>
+                $('#userSearch_0').on('click', function(e) {
+                  e.preventDefault();
+                  var formData = JSON.stringify($("#userSearch").serializeArray());
+                  console.log('testing');
+                  $.ajax({
+                    type: "POST",
+                    url: "/app/usersearch",
+                    data: formData,
+                    success: function(data){
+                      console.log('DATA: ', data)
+                    },
+                    dataType: "json",
+                    contentType : "application/json"
+                  });
+                })
+
+                </script>
             </div>
             <div class='col-md-6'>
                 <% if(output && output.user) { %>

@@ -13,9 +13,11 @@ app.use(express.static('public'))
 app.set('view engine','ejs')
 app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json({ extended: false }))
+
 
 // For Reverse proxy support
-// app.set('trust proxy', 1) 
+// app.set('trust proxy', 1)
 
 // Intialize Session
 app.use(session({

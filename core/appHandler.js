@@ -5,7 +5,9 @@ var mathjs = require('mathjs')
 const Op = db.Sequelize.Op
 
 module.exports.userSearch = function (req, res) {
-	var query = "SELECT name,id FROM Users WHERE login='" + req.body.login + "'";
+	console.log('userSearch');
+	const request_data = req.body[0]
+	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value + "'";
 	db.sequelize.query(query, {
 		model: db.User
 	}).then(user => {
@@ -16,6 +18,8 @@ module.exports.userSearch = function (req, res) {
 					id: user[0].id
 				}
 			}
+
+			console.log('output', output);
 			res.render('app/usersearch', {
 				output: output
 			})
@@ -143,7 +147,7 @@ module.exports.userEditSubmit = function (req, res) {
 	db.User.find({
 		where: {
 			'id': req.body.id
-		}		
+		}
 	}).then(user =>{
 		if(req.body.password.length>0){
 			if(req.body.password.length>0){
@@ -156,7 +160,7 @@ module.exports.userEditSubmit = function (req, res) {
 						userEmail: req.user.email,
 						userName: req.user.name,
 					})
-					return		
+					return
 				}
 			}else{
 				req.flash('warning', 'Invalid Password')
