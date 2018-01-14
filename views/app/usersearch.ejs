@@ -45,7 +45,19 @@
                     url: "/app/usersearch",
                     data: formData,
                     success: function(data){
-                      console.log('DATA: ', data)
+                      $('#searchResults').append(`
+                        <h2>Search Result</h2>
+                        <table class='table'>
+                            <tr>
+                                <th>Name</th>
+                                <td>${data.user.name}</td>
+                            </tr>
+                            <tr>
+                                <th>ID</th>
+                                <td>${data.user.id}</td>
+                            </tr>
+                        </table>
+                      `)
                     },
                     dataType: "json",
                     contentType : "application/json"
@@ -54,20 +66,8 @@
 
                 </script>
             </div>
-            <div class='col-md-6'>
-                <% if(output && output.user) { %>
-                <h2>Search Result</h2>
-                    <table class='table'>
-                        <tr>
-                            <th>Name</th>
-                            <td><%= output.user.name %></td>
-                        </tr>
-                        <tr>
-                            <th>ID</th>
-                            <td><%= output.user.id %></td>
-                        </tr>
-                    </table>
-                <% } %>
+            <div class='col-md-6' id="searchResults">
+
             </div>
         </div>
     </div></div></div>

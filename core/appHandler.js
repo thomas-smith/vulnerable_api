@@ -18,11 +18,10 @@ module.exports.userSearch = function (req, res) {
 					id: user[0].id
 				}
 			}
-
-			console.log('output', output);
-			res.render('app/usersearch', {
-				output: output
-			})
+			// res.render('app/usersearch', {
+			// 	output: output
+			// })
+			res.json(output)
 		} else {
 			req.flash('warning', 'User not found')
 			res.render('app/usersearch', {
