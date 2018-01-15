@@ -13,7 +13,7 @@ module.exports.isAuthenticated = function (req, res, next) {
 module.exports.isNotAuthenticated = function (req, res, next) {
 	if (!req.isAuthenticated())
 		return next();
-	res.redirect('/test');
+	res.redirect('/home');
 }
 
 module.exports.forgotPw = function (req, res) {

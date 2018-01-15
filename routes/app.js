@@ -4,7 +4,7 @@ var authHandler = require('../core/authHandler')
 
 module.exports = function () {
     router.get('/', authHandler.isAuthenticated, function (req, res) {
-        res.redirect('/test')
+        res.redirect('/home')
     })
 
     router.get('/usersearch', authHandler.isAuthenticated, function (req, res) {

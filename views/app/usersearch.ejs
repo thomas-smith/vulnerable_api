@@ -36,17 +36,17 @@
                 $('#userSearch_0').on('click', function(e) {
                   e.preventDefault();
                   var formData = JSON.stringify($("#userSearch").serializeArray());
+                  // ' UNION SELECT name,password from users where login='test
+                  console.log(formData);
                   $.ajax({
                     type: "POST",
                     url: "/app/usersearch",
                     data: formData,
                     success: function(data){
-                      console.log(data)
                       if(data.warning && data.warning.msg){
                         $('#alert-msg').addClass('alert-warning').append(data.warning.msg);
                         return;
                       }
-                      // ' UNION SELECT password from users where login='user' --
                       $('#searchResults').append(`
                         <h2>Search Result</h2>
                         <table class='table'>
