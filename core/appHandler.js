@@ -7,16 +7,14 @@ const Op = db.Sequelize.Op
 module.exports.userSearch = function (req, res) {
 	const request_data = req.body[0]
 	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value + "'";
-	// var query = "SELECT name,id from users where login='' UNION SELECT name,password from users where login='test'";
 
 	db.sequelize.query(query, {
 		model: db.User
 	}).then(user => {
-		console.log('====== user');
-		console.log(user);
 		if (user.length) {
 			var output = {
 				user: {
+					original_request: request_data.value,
 					name: user[0].name,
 					id: user[0].id
 				}
@@ -31,9 +29,9 @@ module.exports.userSearch = function (req, res) {
 }
 
 module.exports.ping = function (req, res) {
-	exec('ping -c 2 ' + req.body.address, function (err, stdout, stderr) {
+	exec('ping -n 2 ' + req.body[0].value, function (err, stdout, stderr) {
 		output = stdout + stderr
-		res.render('app/ping', {
+		res.json({
 			output: output
 		})
 	})

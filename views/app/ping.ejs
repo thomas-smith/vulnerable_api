@@ -14,21 +14,45 @@
                 </div>
 
                 <div class='page-body'>
-                <form id="ping" name="ping" action="/app/ping" method="post">
-                    <fieldset>
+                  <form id="ping" name="ping" action="/app/ping" method="post">
+                      <fieldset>
 
-                        <div class="form-group ">
-                            <label class="  control-label" for="ping_address">Address </label>
-                            <div class="  controls">
+                          <div class="form-group ">
+                              <label class="  control-label" for="ping_address">Address </label>
+                              <div class="  controls">
 
-                                <input type="text" name="address" value="" id="ping_address" class="form-control" placeholder="Enter public IP address" />
-                            </div>
-                        </div>
+                                  <input type="text" name="address" value="" id="ping_address" class="form-control" placeholder="Enter public IP address" />
+                              </div>
+                          </div>
 
-                        <input type="submit" value="Submit" id="ping_0" class="btn btn-primary" />
-
-                    </fieldset>
-                </form>
+                          <input type="submit" value="Submit" id="ping_0" class="btn btn-primary" />
+                      </fieldset>
+                  </form>
+                  <script>
+                    $('#ping_0').on('click', function(e) {
+                      e.preventDefault();
+                      var formData = JSON.stringify($("#ping").serializeArray());
+                      console.log(formData);
+                      $.ajax({
+                        type: "POST",
+                        url: "/app/ping",
+                        data: formData,
+                        success: function(data){
+                          console.log(data);
+                          // if(data.warning && data.warning.msg){
+                          //   $('#alert-msg').addClass('alert-warning').append(data.warning.msg);
+                          //   return;
+                          // }
+                        },
+                        error: function(data){
+                          // $('#alert-msg').addClass('alert-danger').append(data.responseJSON.danger.msg);
+                          console.log(data);
+                        },
+                        dataType: "json",
+                        contentType : "application/json"
+                      });
+                    });
+                  </script>
                 </div>
             </div>
          </div>
@@ -38,7 +62,7 @@
                 <div class='col-md-12'>
                     <h2>Command Output</h2>
                     <hr/>
-                    
+
                     <pre><%= output %></pre>
 
                 </div>

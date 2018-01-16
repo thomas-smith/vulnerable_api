@@ -37,7 +37,6 @@
                   e.preventDefault();
                   var formData = JSON.stringify($("#userSearch").serializeArray());
                   // ' UNION SELECT name,password from users where login='test
-                  console.log(formData);
                   $.ajax({
                     type: "POST",
                     url: "/app/usersearch",
