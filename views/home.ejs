@@ -8,14 +8,10 @@
     <div class='container' style='min-height: 450px'><div class='row'><div class='col-md-12'>
 
         <div class='row'>
-            <!-- <div class='col-md-3'>
+            <div class='col-md-3'>
                 <% include common/menu %>
-            </div> -->
-            <div class='col-md-12'>
-                <h3>Welcome to <strong>Pen Test Partners Vulnerable NodeJS Application</strong></h3>
-                <p>The <i>Pen Test Partners Vulnerable NodeJS Application</i> implements a set of intentionally vulnerable functions in NodeJS for learning purpose.
-                Start by selecting one of the vulnerability class from the left menu or select one of the link below: </p>
-
+            </div>
+            <div class='col-md-9'>
                 <h4>Manual Testing</h4>
                 <ul>
                     <li><a href='/home/vulnerability/a1_injection'>A1: Injection</a></li>
@@ -29,9 +25,13 @@
                     <li><a href='/home/vulnerability/a9_vuln_component'>A9: Using Components with Known Vulnerability</a></li>
                     <li><a href='/home/vulnerability/a10_redirect'>A10: Unvalidated Redirects and Forwards</a></li>
                 </ul>
+                <h3>MySQL Injections</h3>
+                <button type="button" class="btn btn-primary" id="runSQLTest">Run Tests</button>
+                <div id="automated_results_sql"></div>
 
-                <h4>Automated Testing</h4>
-                <button type="button" class="btn btn-primary" id="runTest">Run...</button>
+                <h3>XSS Injections</h3>
+                <button type="button" class="btn btn-primary" id="runXSSTest">Run Tests</button>
+                <div id="automated_results_xss"></div>
             </div>
         </div>
 
