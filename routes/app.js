@@ -45,7 +45,7 @@ module.exports = function() {
 
   router.get('/redirect', appHandler.redirect)
 
-  router.post('/usersearch', authHandler.isAuthenticated, appHandler.userSearch)
+  router.post('/usersearch', appHandler.userSearch)
 
   router.post('/ping', authHandler.isAuthenticated, appHandler.ping)
 

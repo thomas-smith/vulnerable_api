@@ -1,0 +1,58 @@
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "-'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' ''"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' &'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' ^'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "'*'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or ''-'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or '' '"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or ''&'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or ''^'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or ''*'"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": ""-""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" ""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": ""^""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": ""&""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": ""*""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" or ""-""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" or "" ""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" or ""&""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" or ""^""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "" or ""*""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "or true--"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "" or true--"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' or true--"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "") or true--"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "test"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' UNION ALL SELECT NULL,version() #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Good Request", "url": "/app/sql", "request": "someone@test.com"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "This is some test "DATA 'testind'""}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' UNION ALL SELECT NULL,concat(TABLE_NAME) FROM information_schema.TABLES WHERE table_schema='dvna' #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' UNION ALL SELECT NULL,concat(COLUMN_NAME) FROM information_schema.COLUMNS WHERE TABLE_NAME='users' #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM users #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM dvna.users #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,schema_name) FROM information_schema.schemata LIMIT 0,1))) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1))) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "%27 Some test data"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE TABLE_NAME="users" LIMIT 0,1))) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM users LIMIT 0,1))) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM dvna.users LIMIT 0,1))) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (SELECT 1 FROM(SELECT COUNT(*),concat(version(),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (SELECT 1 FROM (SELECT COUNT(*),concat(0x3a,(SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="table1" LIMIT 0,1),0x3a,FLOOR(rand(0)*2))a FROM information_schema.COLUMNS GROUP BY a LIMIT 0,1)b) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM dvna.users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT version()),1,1))) > 52 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (SELECT version()) LIKE "5 %" #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1))) > 95 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1),1,1))) > 95 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="users" LIMIT 0,1),1,1))) > 95 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT name FROM users LIMIT 0,1),1,1))) > 95 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND (ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1))) > 95 #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND sleep(10) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF((SELECT ascii(substr(version(),1,1))) > 53,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF((SELECT version()) LIKE "5 %",sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF(((ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF(((ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema="dvna" LIMIT 0,1),1,1))))> 95,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF(((ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME="users" LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF(((ascii(substr((SELECT name FROM users LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "' AND IF(((ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1)))) >95,sleep(10),NULL) #"}
+{"time": "Thu Jan 18 2018 16:44:48 GMT+0000 (GMT Standard Time)", "type": "Bad Request", "url": "/app/sql", "request": "'"}
