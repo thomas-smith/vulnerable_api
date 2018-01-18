@@ -5,7 +5,7 @@ var mathjs = require('mathjs')
 const Op = db.Sequelize.Op
 
 module.exports.userSearch = function(req, res) {
-	const request_data = req.body[0]
+	const request_data = req.body
 	var query = "SELECT name,id FROM Users WHERE login='" + request_data.value +
 		"'";
 
@@ -75,7 +75,7 @@ module.exports.xss = function(req, res) {
 }
 
 module.exports.ping = function(req, res) {
-	exec('ping -n 2 ' + req.body[0].value, function(err, stdout, stderr) {
+	exec('ping -c 2 ' + req.body[0].value, function(err, stdout, stderr) {
 		output = stdout + stderr
 		res.json({
 			output: output
