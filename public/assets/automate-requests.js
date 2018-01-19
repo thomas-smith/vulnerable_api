@@ -119,7 +119,10 @@ $('#runXSSTest').on('click', function() {
   $(this).addClass('disabled');
   $('#automated_results_xss').html('');
   $.when(
-    sendRequest("'';!--\"<XSS>= & {()}", "app/xss", "#automated_results_xss"),
+    sendRequest("Testing", "app/xss", "#automated_results_xss"),
+    sendRequest("test@email.com", "app/xss", "#automated_results_xss"),
+    sendRequest("onerror", "app/xss", "#automated_results_xss"),
+    sendRequest("\" onerror=\"alert('xss')\"", "app/xss", "#automated_results_xss"),
     sendRequest(" <SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>", "app/xss", "#automated_results_xss"),
     sendRequest("<IMG SRC=\"javascript: alert('XSS');\">", "app/xss", "#automated_results_xss"),
     sendRequest("<IMG SRC=JaVaScRiPt:alert('XSS')>", "app/xss", "#automated_results_xss"),

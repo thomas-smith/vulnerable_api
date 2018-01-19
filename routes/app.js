@@ -57,7 +57,7 @@ module.exports = function() {
 
   router.post('/calc', authHandler.isAuthenticated, appHandler.calc)
 
-  router.post('/xss', authHandler.isAuthenticated, appHandler.xss)
+  router.post('/xss', appHandler.xss)
 
   return router
 }
