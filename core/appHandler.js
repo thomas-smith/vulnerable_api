@@ -37,7 +37,7 @@ function isXss (value) {
 function isLfi(value) {
 	const LFI_BLACKLIST = [
 		"<?php passthru($_GET['cmd']); ?>",
-		"php://filter/convert.base64-encode/resource=",
+		"php://filter/converparsed_data.base64-encode/resource=",
 		"%00",
 		"../../../../../etc/issue",
 		"../../../../../etc/mot",
@@ -123,6 +123,27 @@ module.exports.lfi = function(req, res) {
 	} else {
 			writeToLogs(now, 'Good Request', '/app/lfi',  request_data.value);
 	}
+	var output = {
+		msg: 'Script Executed',
+		response: {
+			original_request: request_data.value
+		}
+	}
+	res.json(output);
+}
+
+module.exports.user = function(req, res) {
+	const request_data = req.body;
+	const now = new Date();
+
+	var parsed_data = JSON.parse(request_data.value);
+
+	if(isXss(parsed_data.picture) || isXss(parsed_data.age) || isXss(parsed_data.name) || isXss(parsed_data.gender) || isXss(parsed_data.company) || isXss(parsed_data.email) || isXss(parsed_data.phone) || isXss(parsed_data.address) || isXss(parsed_data.about) || isXss(parsed_data.registered)){
+		writeToLogs(now, 'Bad Request', '/app/user',  request_data.value);
+	} else {
+			writeToLogs(now, 'Good Request', '/app/user',  request_data.value);
+	}
+
 	var output = {
 		msg: 'Script Executed',
 		response: {
